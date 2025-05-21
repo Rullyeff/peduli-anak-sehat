@@ -11,6 +11,18 @@ import DashboardGuru from "./pages/dashboard/DashboardGuru";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import NotFound from "./pages/NotFound";
 
+// Siswa pages
+import DataKesehatan from "./pages/dashboard/siswa/DataKesehatan";
+import Keluhan from "./pages/dashboard/siswa/Keluhan";
+import Riwayat from "./pages/dashboard/siswa/Riwayat";
+import Statistik from "./pages/dashboard/siswa/Statistik";
+
+// Guru pages
+import DaftarSiswa from "./pages/dashboard/guru/DaftarSiswa";
+import GuruKeluhan from "./pages/dashboard/guru/Keluhan";
+import Laporan from "./pages/dashboard/guru/Laporan";
+import Pemberitahuan from "./pages/dashboard/guru/Pemberitahuan";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -25,11 +37,17 @@ const App = () => (
           
           {/* Rute Dashboard Siswa */}
           <Route path="/dashboard/siswa" element={<DashboardSiswa />} />
-          <Route path="/dashboard/siswa/:subpage" element={<DashboardSiswa />} />
+          <Route path="/dashboard/siswa/data-kesehatan" element={<DataKesehatan />} />
+          <Route path="/dashboard/siswa/keluhan" element={<Keluhan />} />
+          <Route path="/dashboard/siswa/riwayat" element={<Riwayat />} />
+          <Route path="/dashboard/siswa/statistik" element={<Statistik />} />
           
           {/* Rute Dashboard Guru */}
           <Route path="/dashboard/guru" element={<DashboardGuru />} />
-          <Route path="/dashboard/guru/:subpage" element={<DashboardGuru />} />
+          <Route path="/dashboard/guru/siswa" element={<DaftarSiswa />} />
+          <Route path="/dashboard/guru/keluhan" element={<GuruKeluhan />} />
+          <Route path="/dashboard/guru/laporan" element={<Laporan />} />
+          <Route path="/dashboard/guru/pemberitahuan" element={<Pemberitahuan />} />
           
           {/* Rute Dashboard Admin */}
           <Route path="/dashboard/admin" element={<DashboardAdmin />} />
