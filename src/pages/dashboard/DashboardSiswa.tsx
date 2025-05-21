@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { 
@@ -15,35 +14,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
-
-// Links untuk sidebar siswa
-const siswaLinks = [
-  {
-    title: 'Beranda',
-    href: '/dashboard/siswa',
-    icon: <Home size={18} />
-  },
-  {
-    title: 'Isi Data Kesehatan',
-    href: '/dashboard/siswa/data-kesehatan',
-    icon: <ClipboardList size={18} />
-  },
-  {
-    title: 'Keluhan Kesehatan',
-    href: '/dashboard/siswa/keluhan',
-    icon: <MessageSquare size={18} />
-  },
-  {
-    title: 'Riwayat Kesehatan',
-    href: '/dashboard/siswa/riwayat',
-    icon: <History size={18} />
-  },
-  {
-    title: 'Statistik',
-    href: '/dashboard/siswa/statistik',
-    icon: <Activity size={18} />
-  }
-];
+import { siswaLinks } from '@/constants/menuLinks';
 
 const DashboardSiswa = () => {
   const [suhu, setSuhu] = useState('');

@@ -7,13 +7,14 @@ import { cn } from '@/lib/utils';
 import { LogOut, Menu, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { LucideIcon } from 'lucide-react';
 
 interface SidebarProps {
   role: 'siswa' | 'guru' | 'admin';
   links: {
     title: string;
     href: string;
-    icon: React.ReactNode;
+    icon: LucideIcon;
   }[];
 }
 
@@ -71,25 +72,28 @@ const SidebarDashboard = ({ role, links }: SidebarProps) => {
 
         <ScrollArea className="flex-1">
           <nav className="p-4 space-y-1">
-            {links.map((link, index) => (
-              <Link
-                key={index}
-                to={link.href}
-                className={cn(
-                  "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
-                  location.pathname === link.href
-                    ? role === 'siswa' 
-                      ? "bg-kesehatan-biru/10 text-kesehatan-biru font-medium"
-                      : role === 'guru'
-                        ? "bg-kesehatan-hijau/10 text-kesehatan-hijau font-medium"
-                        : "bg-kesehatan-kuning/10 text-kesehatan-kuning font-medium"
-                    : "text-gray-600 hover:bg-gray-100"
-                )}
-              >
-                {link.icon}
-                <span>{link.title}</span>
-              </Link>
-            ))}
+            {links.map((link, index) => {
+              const Icon = link.icon;
+              return (
+                <Link
+                  key={index}
+                  to={link.href}
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 rounded-md transition-colors",
+                    location.pathname === link.href
+                      ? role === 'siswa' 
+                        ? "bg-kesehatan-biru/10 text-kesehatan-biru font-medium"
+                        : role === 'guru'
+                          ? "bg-kesehatan-hijau/10 text-kesehatan-hijau font-medium"
+                          : "bg-kesehatan-kuning/10 text-kesehatan-kuning font-medium"
+                      : "text-gray-600 hover:bg-gray-100"
+                  )}
+                >
+                  <Icon size={18} />
+                  <span>{link.title}</span>
+                </Link>
+              );
+            })}
           </nav>
         </ScrollArea>
 

@@ -14,27 +14,27 @@ export const siswaLinks = [
   {
     title: 'Beranda',
     href: '/dashboard/siswa',
-    icon: <Home size={18} />
+    icon: Home
   },
   {
     title: 'Isi Data Kesehatan',
     href: '/dashboard/siswa/data-kesehatan',
-    icon: <ClipboardList size={18} />
+    icon: ClipboardList
   },
   {
     title: 'Keluhan Kesehatan',
     href: '/dashboard/siswa/keluhan',
-    icon: <MessageSquare size={18} />
+    icon: MessageSquare
   },
   {
     title: 'Riwayat Kesehatan',
     href: '/dashboard/siswa/riwayat',
-    icon: <History size={18} />
+    icon: History
   },
   {
     title: 'Statistik',
     href: '/dashboard/siswa/statistik',
-    icon: <Activity size={18} />
+    icon: Activity
   }
 ];
 
@@ -42,27 +42,27 @@ export const guruLinks = [
   {
     title: 'Beranda',
     href: '/dashboard/guru',
-    icon: <Home size={18} />
+    icon: Home
   },
   {
     title: 'Daftar Siswa',
     href: '/dashboard/guru/siswa',
-    icon: <Users size={18} />
+    icon: Users
   },
   {
     title: 'Tanggapan Keluhan',
     href: '/dashboard/guru/keluhan',
-    icon: <MessageSquare size={18} />
+    icon: MessageSquare
   },
   {
     title: 'Laporan Kesehatan',
     href: '/dashboard/guru/laporan',
-    icon: <FileText size={18} />
+    icon: FileText
   },
   {
     title: 'Pemberitahuan',
     href: '/dashboard/guru/pemberitahuan',
-    icon: <Bell size={18} />
+    icon: Bell
   }
 ];
 
@@ -70,26 +70,26 @@ export const adminLinks = [
   {
     title: 'Beranda',
     href: '/dashboard/admin',
-    icon: <Home size={18} />
+    icon: Home
   },
   {
     title: 'Kelola Siswa',
     href: '/dashboard/admin/siswa',
-    icon: <Users size={18} />
+    icon: Users
   },
   {
     title: 'Kelola Guru',
     href: '/dashboard/admin/guru',
-    icon: <Users size={18} />
+    icon: Users
   },
   {
     title: 'Laporan Lengkap',
     href: '/dashboard/admin/laporan',
-    icon: <FileText size={18} />
+    icon: FileText
   },
   {
     title: 'Pengaturan',
     href: '/dashboard/admin/pengaturan',
-    icon: <Bell size={18} />
+    icon: Bell
   }
 ];
