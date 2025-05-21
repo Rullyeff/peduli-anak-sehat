@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,7 +62,18 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Warna tema baru untuk website peduli kesehatan
+				"kesehatan-biru": "#0EA5E9",
+				"kesehatan-hijau": "#10B981",
+				"kesehatan-kuning": "#FBBF24",
+				"kesehatan-oranye": "#F97316",
+				"kesehatan-merah": "#EF4444",
+				"kesehatan-ungu": "#8B5CF6",
+				"kesehatan-biru-muda": "#7DD3FC",
+				"kesehatan-hijau-muda": "#A7F3D0",
+				"kesehatan-kuning-muda": "#FDE68A",
+				"kesehatan-pink": "#FDA4AF",
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
@@ -84,11 +96,34 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'bounce-slow': {
+					'0%, 100%': {
+						transform: 'translateY(-5%)',
+						animationTimingFunction: 'cubic-bezier(0.8, 0, 1, 1)'
+					},
+					'50%': {
+						transform: 'translateY(0)',
+						animationTimingFunction: 'cubic-bezier(0, 0, 0.2, 1)'
+					}
+				},
+				'float': {
+					'0%, 100%': {
+						transform: 'translateY(0)'
+					},
+					'50%': {
+						transform: 'translateY(-10px)'
+					}
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'bounce-slow': 'bounce-slow 3s infinite',
+				'float': 'float 6s ease-in-out infinite'
+			},
+			fontFamily: {
+				'nunito': ['Nunito', 'sans-serif']
 			}
 		}
 	},
