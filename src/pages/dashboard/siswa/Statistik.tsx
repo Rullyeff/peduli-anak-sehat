@@ -70,7 +70,7 @@ const Statistik = () => {
       setIsLoading(true);
       
       // For demo - in real app use the authenticated user
-      const siswaId = 1;
+      const siswaId = "1";
       
       // Create appropriate date range filter
       const now = new Date();

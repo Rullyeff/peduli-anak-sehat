@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { 
@@ -46,7 +45,7 @@ const DataKesehatan = () => {
     try {
       // Get current user data (in real implementation)
       // For demo, we'll use a fixed user ID
-      const siswaId = 1; // This would be the actual user ID from auth
+      const siswaId = "1"; // This would be the actual user ID from auth
       
       const { error } = await supabase
         .from('kesehatan_harian')
@@ -55,7 +54,7 @@ const DataKesehatan = () => {
           suhu_tubuh: parseFloat(suhu),
           berat_badan: parseFloat(beratBadan),
           tinggi_badan: parseFloat(tinggiBadan),
-          kondisi: kondisi,
+          status: kondisi, // Using status instead of kondisi to match DB schema
           keluhan: kondisi === 'sakit' ? keluhan : null,
         });
 

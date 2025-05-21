@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { 
@@ -32,35 +31,7 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
-
-// Links untuk sidebar admin
-const adminLinks = [
-  {
-    title: 'Beranda',
-    href: '/dashboard/admin',
-    icon: <Home size={18} />
-  },
-  {
-    title: 'Kelola Akun',
-    href: '/dashboard/admin/akun',
-    icon: <Users size={18} />
-  },
-  {
-    title: 'Tambah Akun',
-    href: '/dashboard/admin/tambah-akun',
-    icon: <UserPlus size={18} />
-  },
-  {
-    title: 'Laporan Kesehatan',
-    href: '/dashboard/admin/laporan',
-    icon: <FileText size={18} />
-  },
-  {
-    title: 'Pengaturan',
-    href: '/dashboard/admin/pengaturan',
-    icon: <Settings size={18} />
-  }
-];
+import { adminLinks } from '@/constants/menuLinks';
 
 // Data dummy pengguna
 const dummyUsers = [

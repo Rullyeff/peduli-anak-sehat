@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { 
@@ -22,23 +21,13 @@ import { Separator } from '@/components/ui/separator';
 import { toast } from 'sonner';
 import { guruLinks } from '@/constants/menuLinks';
 import { supabase } from '@/integrations/supabase/client';
+import { Complaint } from '@/types';
 
-interface Complaint {
-  id: number;
-  siswa_id: number;
-  siswa_name: string;
-  keluhan_text: string;
-  created_at: string;
-  status: string;
-  response?: string;
-  response_date?: string;
-}
-
-const Keluhan = () => {
+const KeluhanGuru = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
   const [selectedClass, setSelectedClass] = useState('6A');
-  const [selectedComplaint, setSelectedComplaint] = useState<number | null>(null);
+  const [selectedComplaint, setSelectedComplaint] = useState<string | null>(null);
   const [responseText, setResponseText] = useState('');
   const [complaints, setComplaints] = useState<Complaint[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,8 +45,7 @@ const Keluhan = () => {
         .from('keluhan')
         .select(`
           *,
-          siswa!inner(id, nama, kelas),
-          responses(*)
+          siswa!inner(id, nama, kelas)
         `)
         .eq('siswa.kelas', selectedClass);
       
@@ -74,19 +62,16 @@ const Keluhan = () => {
       if (error) throw error;
       
       if (data) {
-        // Process data to include student name and response
-        const processedComplaints = data.map(item => {
-          const response = item.responses && item.responses.length > 0 ? item.responses[0] : null;
-          
+        const processedComplaints: Complaint[] = data.map(item => {
           return {
             id: item.id,
             siswa_id: item.siswa_id,
             siswa_name: item.siswa.nama,
-            keluhan_text: item.keluhan_text,
+            isi_keluhan: item.isi_keluhan,
             created_at: item.created_at,
             status: item.status,
-            response: response?.response_text,
-            response_date: response?.created_at
+            response: item.tanggapan || undefined,
+            response_date: item.updated_at
           };
         });
         
@@ -112,22 +97,13 @@ const Keluhan = () => {
       setIsSubmitting(true);
       
       try {
-        // 1. Insert response
-        const { data: responseData, error: responseError } = await supabase
-          .from('responses')
-          .insert({
-            keluhan_id: selectedComplaint,
-            guru_id: 1, // In a real app, use the authenticated teacher's ID
-            response_text: responseText
-          })
-          .select();
-        
-        if (responseError) throw responseError;
-        
-        // 2. Update keluhan status
+        // Update the keluhan with the response
         const { error: updateError } = await supabase
           .from('keluhan')
-          .update({ status: 'ditanggapi' })
+          .update({ 
+            tanggapan: responseText,
+            status: 'ditanggapi'
+          })
           .eq('id', selectedComplaint);
         
         if (updateError) throw updateError;
@@ -149,7 +125,7 @@ const Keluhan = () => {
 
   const filteredComplaints = complaints.filter(complaint =>
     complaint.siswa_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    complaint.keluhan_text.toLowerCase().includes(searchTerm.toLowerCase())
+    complaint.isi_keluhan.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const formatDate = (dateString: string) => {
@@ -254,7 +230,7 @@ const Keluhan = () => {
                       </div>
                       
                       <div className="ml-12">
-                        <p className="text-sm text-gray-700">{complaint.keluhan_text}</p>
+                        <p className="text-sm text-gray-700">{complaint.isi_keluhan}</p>
                         
                         {complaint.status === 'ditanggapi' && complaint.response && (
                           <div className="mt-3 p-2 bg-green-50 rounded-md border border-green-100">
@@ -292,7 +268,7 @@ const Keluhan = () => {
                         {filteredComplaints.find(c => c.id === selectedComplaint)?.siswa_name}
                       </p>
                       <p className="text-sm text-gray-600">
-                        {filteredComplaints.find(c => c.id === selectedComplaint)?.keluhan_text}
+                        {filteredComplaints.find(c => c.id === selectedComplaint)?.isi_keluhan}
                       </p>
                     </div>
                   </div>
@@ -351,4 +327,4 @@ const Keluhan = () => {
   );
 };
 
-export default Keluhan;
+export default KeluhanGuru;

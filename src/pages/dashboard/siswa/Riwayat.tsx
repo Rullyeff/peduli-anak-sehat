@@ -17,19 +17,22 @@ import { toast } from 'sonner';
 import { siswaLinks } from '@/constants/menuLinks';
 import { supabase } from '@/integrations/supabase/client';
 
-interface HealthRecord {
-  id: number;
-  siswa_id: number;
+interface KesehatanHarian {
+  id: string;
+  siswa_id: string;
   suhu_tubuh: number;
   berat_badan: number;
   tinggi_badan: number;
-  kondisi: string;
+  status: string;
   keluhan: string | null;
   created_at: string;
+  updated_at: string;
+  tanggal: string;
+  catatan: string | null;
 }
 
 const Riwayat = () => {
-  const [healthRecords, setHealthRecords] = useState<HealthRecord[]>([]);
+  const [healthRecords, setHealthRecords] = useState<KesehatanHarian[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState('seminggu');
 
@@ -42,7 +45,7 @@ const Riwayat = () => {
       setIsLoading(true);
       
       // For demo purposes - in a real app use the authenticated user's ID
-      const siswaId = 1;
+      const siswaId = "1";
       
       let query = supabase
         .from('kesehatan_harian')

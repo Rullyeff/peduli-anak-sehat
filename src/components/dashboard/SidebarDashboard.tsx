@@ -8,14 +8,11 @@ import { LogOut, Menu, X } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LucideIcon } from 'lucide-react';
+import { NavLink } from '@/types';
 
 interface SidebarProps {
   role: 'siswa' | 'guru' | 'admin';
-  links: {
-    title: string;
-    href: string;
-    icon: LucideIcon;
-  }[];
+  links: NavLink[];
 }
 
 const SidebarDashboard = ({ role, links }: SidebarProps) => {

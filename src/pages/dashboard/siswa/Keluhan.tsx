@@ -18,9 +18,19 @@ import { toast } from 'sonner';
 import { siswaLinks } from '@/constants/menuLinks';
 import { supabase } from '@/integrations/supabase/client';
 
+interface KeluhanData {
+  id: string;
+  siswa_id: string;
+  isi_keluhan: string;
+  status: string;
+  tanggapan: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 const Keluhan = () => {
   const [keluhanText, setKeluhanText] = useState('');
-  const [keluhan, setKeluhan] = useState<any[]>([]);
+  const [keluhan, setKeluhan] = useState<KeluhanData[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -32,14 +42,11 @@ const Keluhan = () => {
     try {
       setIsLoading(true);
       // In a real app, filter by current user's ID
-      const siswaId = 1; // Example ID for demo purposes
+      const siswaId = "1"; // Example ID for demo purposes
       
       const { data, error } = await supabase
         .from('keluhan')
-        .select(`
-          *,
-          responses (*)
-        `)
+        .select('*')
         .eq('siswa_id', siswaId)
         .order('created_at', { ascending: false });
       
@@ -65,13 +72,13 @@ const Keluhan = () => {
     
     try {
       // In a real app, use the authenticated user's ID
-      const siswaId = 1; // Example ID for demo
+      const siswaId = "1"; // Example ID for demo
       
       const { error } = await supabase
         .from('keluhan')
         .insert({
           siswa_id: siswaId,
-          keluhan_text: keluhanText,
+          isi_keluhan: keluhanText,
           status: 'menunggu'
         });
       
