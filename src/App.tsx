@@ -10,6 +10,7 @@ import DashboardSiswa from "./pages/dashboard/DashboardSiswa";
 import DashboardGuru from "./pages/dashboard/DashboardGuru";
 import DashboardAdmin from "./pages/dashboard/DashboardAdmin";
 import NotFound from "./pages/NotFound";
+import Artikel from "./pages/Artikel";
 
 // Siswa pages
 import DataKesehatan from "./pages/dashboard/siswa/DataKesehatan";
@@ -34,6 +35,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/artikel" element={<Artikel />} />
           
           {/* Rute Dashboard Siswa */}
           <Route path="/dashboard/siswa" element={<DashboardSiswa />} />
