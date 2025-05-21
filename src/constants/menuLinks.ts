@@ -9,8 +9,9 @@ import {
   FileText,
   Bell
 } from 'lucide-react';
+import { NavLink } from '@/types';
 
-export const siswaLinks = [
+export const siswaLinks: NavLink[] = [
   {
     title: 'Beranda',
     href: '/dashboard/siswa',
@@ -38,7 +39,7 @@ export const siswaLinks = [
   }
 ];
 
-export const guruLinks = [
+export const guruLinks: NavLink[] = [
   {
     title: 'Beranda',
     href: '/dashboard/guru',
@@ -66,7 +67,7 @@ export const guruLinks = [
   }
 ];
 
-export const adminLinks = [
+export const adminLinks: NavLink[] = [
   {
     title: 'Beranda',
     href: '/dashboard/admin',

@@ -1,21 +1,16 @@
 
 import React, { useState, useEffect } from 'react';
-import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
-import { 
-  Home, 
-  ClipboardList, 
-  MessageSquare, 
-  History, 
-  Activity,
-  Calendar,
-  Download
-} from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { toast } from 'sonner';
+import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { siswaLinks } from '@/constants/menuLinks';
+import { Badge } from '@/components/ui/badge';
+import { Calendar, ChevronLeft, ChevronRight, Activity, Thermometer, Weight, ArrowUpDown } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { format } from 'date-fns';
+import { id } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
+import { HealthRecord } from '@/types';
 
 interface KesehatanHarian {
   id: string;
@@ -25,177 +20,221 @@ interface KesehatanHarian {
   tinggi_badan: number;
   status: string;
   keluhan: string | null;
+  catatan: string | null;
   created_at: string;
   updated_at: string;
   tanggal: string;
-  catatan: string | null;
 }
 
 const Riwayat = () => {
-  const [healthRecords, setHealthRecords] = useState<KesehatanHarian[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [filter, setFilter] = useState('seminggu');
+  const [riwayat, setRiwayat] = useState<HealthRecord[]>([]);
+  const [filter, setFilter] = useState('all');
+  const [bulan, setBulan] = useState(new Date().getMonth() + 1);
+  const [tahun, setTahun] = useState(new Date().getFullYear());
+  const [isLoading, setIsLoading] = useState(false);
+  const userId = '1'; // This would come from authentication context
 
-  useEffect(() => {
-    fetchHealthRecords(filter);
-  }, [filter]);
-
-  const fetchHealthRecords = async (timeFrame: string) => {
+  const fetchRiwayatKesehatan = async () => {
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-      
-      // For demo purposes - in a real app use the authenticated user's ID
-      const siswaId = "1";
-      
-      let query = supabase
+      const { data, error } = await supabase
         .from('kesehatan_harian')
         .select('*')
-        .eq('siswa_id', siswaId)
-        .order('created_at', { ascending: false });
-      
-      // Apply time filter
-      const now = new Date();
-      let startDate;
-      
-      switch (timeFrame) {
-        case 'seminggu':
-          startDate = new Date(now);
-          startDate.setDate(now.getDate() - 7);
-          query = query.gte('created_at', startDate.toISOString());
-          break;
-        case 'sebulan':
-          startDate = new Date(now);
-          startDate.setMonth(now.getMonth() - 1);
-          query = query.gte('created_at', startDate.toISOString());
-          break;
-        case 'semester':
-          startDate = new Date(now);
-          startDate.setMonth(now.getMonth() - 6);
-          query = query.gte('created_at', startDate.toISOString());
-          break;
-        // 'semua' doesn't need filtering
-      }
-      
-      const { data, error } = await query;
-      
+        .eq('siswa_id', userId)
+        .gte('tanggal', `${tahun}-${bulan.toString().padStart(2, '0')}-01`)
+        .lte('tanggal', `${tahun}-${bulan.toString().padStart(2, '0')}-31`)
+        .order('tanggal', { ascending: false });
+
       if (error) throw error;
-      
-      setHealthRecords(data || []);
+
+      if (data) {
+        // Transform the data to match the HealthRecord interface
+        const formattedRecords: HealthRecord[] = data.map((item: KesehatanHarian) => ({
+          id: item.id,
+          siswa_id: item.siswa_id,
+          suhu_tubuh: item.suhu_tubuh,
+          berat_badan: item.berat_badan,
+          tinggi_badan: item.tinggi_badan,
+          status: item.status,
+          keluhan: item.keluhan,
+          created_at: item.created_at,
+          tanggal: item.tanggal
+        }));
+
+        setRiwayat(formattedRecords);
+      }
     } catch (error) {
-      console.error('Error fetching health records:', error);
-      toast.error('Gagal memuat data riwayat kesehatan');
+      console.error('Error fetching riwayat kesehatan:', error);
     } finally {
       setIsLoading(false);
     }
   };
 
-  const formatDate = (dateString: string) => {
-    const options: Intl.DateTimeFormatOptions = { 
-      day: 'numeric', 
-      month: 'long', 
-      year: 'numeric'
-    };
-    return new Date(dateString).toLocaleDateString('id-ID', options);
+  useEffect(() => {
+    fetchRiwayatKesehatan();
+  }, [bulan, tahun]);
+
+  const handlePrevMonth = () => {
+    if (bulan === 1) {
+      setBulan(12);
+      setTahun(tahun - 1);
+    } else {
+      setBulan(bulan - 1);
+    }
   };
 
-  const handleExport = () => {
-    // In a real app, implement CSV export functionality
-    toast.success('Data berhasil diunduh');
+  const handleNextMonth = () => {
+    if (bulan === 12) {
+      setBulan(1);
+      setTahun(tahun + 1);
+    } else {
+      setBulan(bulan + 1);
+    }
   };
+
+  const filteredRiwayat = filter === 'all' 
+    ? riwayat 
+    : riwayat.filter(item => item.status === filter);
 
   return (
     <div className="min-h-screen flex bg-gray-50">
       <SidebarDashboard role="siswa" links={siswaLinks} />
 
-      <div className="flex-1 p-4 pt-6 sm:p-6 lg:p-8 ml-0 md:ml-64">
-        <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Riwayat Kesehatan</h1>
-          <p className="text-gray-600">Lihat rekap data kesehatan Anda selama ini</p>
-        </div>
+      <div className="flex-1 p-6 pt-6 lg:p-8 ml-0 md:ml-64">
+        <h1 className="text-2xl font-bold text-gray-900 mb-6">Riwayat Kesehatan</h1>
 
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
-          <div className="flex items-center gap-2">
-            <Calendar size={18} className="text-kesehatan-biru" />
-            <span className="font-medium">Filter Periode:</span>
-          </div>
-          <div className="flex gap-2">
-            <Select value={filter} onValueChange={setFilter}>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Pilih periode" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="seminggu">Seminggu Terakhir</SelectItem>
-                <SelectItem value="sebulan">Sebulan Terakhir</SelectItem>
-                <SelectItem value="semester">Semester Ini</SelectItem>
-                <SelectItem value="semua">Semua Riwayat</SelectItem>
-              </SelectContent>
-            </Select>
+        <div className="grid grid-cols-1 gap-6">
+          <Card>
+            <CardHeader className="pb-2">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div>
+                  <CardTitle>Catatan Kesehatan Harian</CardTitle>
+                  <CardDescription>
+                    Riwayat pencatatan kesehatan Anda
+                  </CardDescription>
+                </div>
 
-            <Button variant="outline" className="flex gap-2" onClick={handleExport}>
-              <Download size={16} />
-              <span>Unduh</span>
-            </Button>
-          </div>
-        </div>
+                <div className="flex items-center space-x-4">
+                  <div className="flex items-center">
+                    <Button variant="ghost" size="icon" onClick={handlePrevMonth}>
+                      <ChevronLeft className="h-4 w-4" />
+                    </Button>
+                    <div className="flex items-center px-2">
+                      <Calendar className="mr-2 h-4 w-4 text-gray-500" />
+                      <span>{format(new Date(tahun, bulan - 1, 1), 'MMMM yyyy', { locale: id })}</span>
+                    </div>
+                    <Button variant="ghost" size="icon" onClick={handleNextMonth}>
+                      <ChevronRight className="h-4 w-4" />
+                    </Button>
+                  </div>
 
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle>Data Riwayat Kesehatan</CardTitle>
-            <CardDescription>
-              Riwayat data kesehatan harian yang telah Anda isi
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            {isLoading ? (
-              <div className="flex justify-center py-8">
-                <p>Memuat data...</p>
-              </div>
-            ) : healthRecords.length === 0 ? (
-              <div className="text-center py-8 text-gray-500">
-                <p>Tidak ada data kesehatan dalam periode ini</p>
-              </div>
-            ) : (
-              <div className="rounded-md border">
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="bg-gray-50 border-b">
-                        <th className="py-3 px-4 text-left font-medium">Tanggal</th>
-                        <th className="py-3 px-4 text-left font-medium">Suhu Tubuh</th>
-                        <th className="py-3 px-4 text-left font-medium">Berat Badan</th>
-                        <th className="py-3 px-4 text-left font-medium">Tinggi Badan</th>
-                        <th className="py-3 px-4 text-left font-medium">Kondisi</th>
-                        <th className="py-3 px-4 text-left font-medium">Keluhan</th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y">
-                      {healthRecords.map((record) => (
-                        <tr key={record.id} className="hover:bg-gray-50">
-                          <td className="p-4">{formatDate(record.created_at)}</td>
-                          <td className="p-4">{record.suhu_tubuh}°C</td>
-                          <td className="p-4">{record.berat_badan} kg</td>
-                          <td className="p-4">{record.tinggi_badan} cm</td>
-                          <td className="p-4">
-                            <span className={`px-2 py-1 text-xs rounded-full ${
-                              record.kondisi === 'sehat' 
-                                ? 'bg-green-100 text-green-800' 
-                                : 'bg-red-100 text-red-800'
-                            }`}>
-                              {record.kondisi === 'sehat' ? 'Sehat' : 'Kurang Sehat'}
-                            </span>
-                          </td>
-                          <td className="p-4">
-                            {record.keluhan || <span className="text-gray-400">-</span>}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  <Select value={filter} onValueChange={setFilter}>
+                    <SelectTrigger className="w-[130px]">
+                      <SelectValue placeholder="Filter" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Semua Status</SelectItem>
+                      <SelectItem value="normal">Normal</SelectItem>
+                      <SelectItem value="warning">Perlu Perhatian</SelectItem>
+                      <SelectItem value="danger">Perlu Tindakan</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
               </div>
-            )}
-          </CardContent>
-        </Card>
+            </CardHeader>
+
+            <CardContent>
+              {isLoading ? (
+                <div className="text-center py-8">
+                  <p className="text-gray-500">Memuat data...</p>
+                </div>
+              ) : filteredRiwayat.length > 0 ? (
+                <div className="space-y-4">
+                  {filteredRiwayat.map((item) => (
+                    <div key={item.id} className="border rounded-lg p-4">
+                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+                        <div className="flex items-center">
+                          <div className={`h-10 w-10 rounded-full flex items-center justify-center ${
+                            item.status === 'normal' 
+                              ? 'bg-green-100 text-green-700' 
+                              : item.status === 'warning'
+                                ? 'bg-amber-100 text-amber-700'
+                                : 'bg-red-100 text-red-700'
+                          }`}>
+                            <Activity className="h-5 w-5" />
+                          </div>
+                          <div className="ml-3">
+                            <p className="font-medium">
+                              {format(new Date(item.tanggal), 'EEEE, d MMMM yyyy', { locale: id })}
+                            </p>
+                            <p className="text-sm text-gray-500">
+                              {format(new Date(item.created_at), 'HH:mm', { locale: id })} WIB
+                            </p>
+                          </div>
+                        </div>
+
+                        <Badge className={
+                          item.status === 'normal' 
+                            ? 'bg-green-100 text-green-800 hover:bg-green-100'
+                            : item.status === 'warning' 
+                              ? 'bg-amber-100 text-amber-800 hover:bg-amber-100'
+                              : 'bg-red-100 text-red-800 hover:bg-red-100'
+                        }>
+                          {item.status === 'normal' 
+                            ? 'Normal' 
+                            : item.status === 'warning'
+                              ? 'Perlu Perhatian'
+                              : 'Perlu Tindakan'}
+                        </Badge>
+                      </div>
+
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-3">
+                        <div className="flex items-center p-3 bg-gray-50 rounded-md">
+                          <Thermometer className="h-5 w-5 text-blue-600 mr-2" />
+                          <div>
+                            <p className="text-sm text-gray-500">Suhu Tubuh</p>
+                            <p className="font-medium">{item.suhu_tubuh}°C</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center p-3 bg-gray-50 rounded-md">
+                          <Weight className="h-5 w-5 text-indigo-600 mr-2" />
+                          <div>
+                            <p className="text-sm text-gray-500">Berat Badan</p>
+                            <p className="font-medium">{item.berat_badan} kg</p>
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center p-3 bg-gray-50 rounded-md">
+                          <ArrowUpDown className="h-5 w-5 text-purple-600 mr-2" />
+                          <div>
+                            <p className="text-sm text-gray-500">Tinggi Badan</p>
+                            <p className="font-medium">{item.tinggi_badan} cm</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {item.keluhan && (
+                        <div className="bg-blue-50 p-3 rounded-md border border-blue-100 mb-2">
+                          <p className="text-sm font-medium text-blue-700 mb-1">Keluhan:</p>
+                          <p className="text-gray-700">{item.keluhan}</p>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <div className="text-center py-8 border rounded-lg">
+                  <Activity className="h-12 w-12 text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-500">Belum ada data kesehatan untuk bulan ini</p>
+                  <Button className="mt-4 bg-kesehatan-biru hover:bg-kesehatan-biru/90">
+                    Isi Data Kesehatan
+                  </Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );

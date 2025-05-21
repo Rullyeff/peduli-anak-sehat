@@ -1,11 +1,6 @@
 import React, { useState } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { 
-  Home, 
-  Users, 
-  MessageSquare, 
-  FileText, 
-  Bell,
   Search,
   Calendar,
   ChevronDown
@@ -20,35 +15,6 @@ import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
 import { guruLinks } from '@/constants/menuLinks';
-
-// Links untuk sidebar guru
-const guruLinks = [
-  {
-    title: 'Beranda',
-    href: '/dashboard/guru',
-    icon: <Home size={18} />
-  },
-  {
-    title: 'Daftar Siswa',
-    href: '/dashboard/guru/siswa',
-    icon: <Users size={18} />
-  },
-  {
-    title: 'Tanggapan Keluhan',
-    href: '/dashboard/guru/keluhan',
-    icon: <MessageSquare size={18} />
-  },
-  {
-    title: 'Laporan Kesehatan',
-    href: '/dashboard/guru/laporan',
-    icon: <FileText size={18} />
-  },
-  {
-    title: 'Pemberitahuan',
-    href: '/dashboard/guru/notifikasi',
-    icon: <Bell size={18} />
-  }
-];
 
 // Data dummy siswa
 const dummyStudents = [
