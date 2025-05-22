@@ -24,6 +24,12 @@ import GuruKeluhan from "./pages/dashboard/guru/Keluhan";
 import Laporan from "./pages/dashboard/guru/Laporan";
 import Pemberitahuan from "./pages/dashboard/guru/Pemberitahuan";
 
+// Admin pages
+import KelolaSiswa from "./pages/dashboard/admin/KelolaSiswa";
+import KelolaGuru from "./pages/dashboard/admin/KelolaGuru";
+import LaporanLengkap from "./pages/dashboard/admin/LaporanLengkap";
+import Pengaturan from "./pages/dashboard/admin/Pengaturan";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -53,7 +59,10 @@ const App = () => (
           
           {/* Rute Dashboard Admin */}
           <Route path="/dashboard/admin" element={<DashboardAdmin />} />
-          <Route path="/dashboard/admin/:subpage" element={<DashboardAdmin />} />
+          <Route path="/dashboard/admin/siswa" element={<KelolaSiswa />} />
+          <Route path="/dashboard/admin/guru" element={<KelolaGuru />} />
+          <Route path="/dashboard/admin/laporan" element={<LaporanLengkap />} />
+          <Route path="/dashboard/admin/pengaturan" element={<Pengaturan />} />
           
           {/* Rute Catch-All untuk 404 */}
           <Route path="*" element={<NotFound />} />

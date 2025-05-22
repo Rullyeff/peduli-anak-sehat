@@ -7,7 +7,8 @@ import {
   Activity,
   Users,
   FileText,
-  Bell
+  Bell,
+  Settings
 } from 'lucide-react';
 import { NavLink } from '@/types';
 
@@ -91,6 +92,6 @@ export const adminLinks: NavLink[] = [
   {
     title: 'Pengaturan',
     href: '/dashboard/admin/pengaturan',
-    icon: Bell
+    icon: Settings
   }
 ];
