@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight, BookOpen, Info, Child } from 'lucide-react';
+import { ArrowRight, BookOpen, Info, Baby } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -109,7 +109,7 @@ const Index = () => {
             <Card className="border-2 border-teal-100 hover:border-teal-300 transition-colors duration-300">
               <CardContent className="pt-6">
                 <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-teal-100 flex items-center justify-center">
-                  <Child className="h-8 w-8 text-teal-600" />
+                  <Baby className="h-8 w-8 text-teal-600" />
                 </div>
                 <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">Mengenal Tubuh Kita</h3>
                 <p className="text-gray-600 text-center mb-4">
