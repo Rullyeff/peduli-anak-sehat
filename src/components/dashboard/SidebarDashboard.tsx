@@ -1,14 +1,21 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { cn } from '@/lib/utils';
-import { LogOut, Menu, X } from 'lucide-react';
+import { LogOut, Menu, X, CircleUser, Calendar, Bell } from 'lucide-react';
 import { toast } from 'sonner';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { LucideIcon } from 'lucide-react';
 import { NavLink } from '@/types';
+import { Badge } from '@/components/ui/badge';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 interface SidebarProps {
   role: 'siswa' | 'guru' | 'admin';
@@ -17,13 +24,35 @@ interface SidebarProps {
 
 const SidebarDashboard = ({ role, links }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [notifications, setNotifications] = useState(3); // Example notification count
   const navigate = useNavigate();
   const location = useLocation();
   const isMobile = useIsMobile();
 
+  // User display information (in a real app, would come from auth)
+  const [user, setUser] = useState({
+    name: role === 'siswa' ? 'Akbar Maulana' : role === 'guru' ? 'Budi Santoso' : 'Admin Sekolah',
+    avatar: null,
+    role: role === 'siswa' ? 'Siswa Kelas 6A' : role === 'guru' ? 'Guru Matematika' : 'Administrator',
+  });
+
   const handleLogout = () => {
     toast.success('Berhasil keluar dari sistem');
     navigate('/login');
+  };
+
+  const handleRoleSwitch = (newRole: string) => {
+    // In a real app, this would involve permissions check
+    if (newRole === 'siswa') {
+      navigate('/dashboard/siswa');
+      toast('Beralih ke akun Siswa');
+    } else if (newRole === 'guru') {
+      navigate('/dashboard/guru');
+      toast('Beralih ke akun Guru');
+    } else if (newRole === 'admin') {
+      navigate('/dashboard/admin');
+      toast('Beralih ke akun Admin');
+    }
   };
 
   // Warna berdasarkan role
@@ -64,6 +93,94 @@ const SidebarDashboard = ({ role, links }: SidebarProps) => {
               <h2 className="text-lg font-bold">PEDULIKECIL</h2>
               <p className="text-sm opacity-90">Dashboard {roleName}</p>
             </div>
+          </div>
+        </div>
+
+        <div className="p-4 border-b border-gray-200">
+          <div className="flex justify-between items-center">
+            <div className="flex items-center">
+              <div className="h-10 w-10 rounded-full bg-gray-100 flex items-center justify-center">
+                <CircleUser className="text-gray-500" size={20} />
+              </div>
+              <div className="ml-3">
+                <p className="font-medium text-sm">{user.name}</p>
+                <p className="text-xs text-gray-500">{user.role}</p>
+              </div>
+            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="h-8 w-8">
+                  <Bell size={18} className="relative">
+                    {notifications > 0 && (
+                      <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 text-xs text-white flex items-center justify-center">
+                        {notifications}
+                      </span>
+                    )}
+                  </Bell>
+                  <span className="sr-only">Notifikasi</span>
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem>
+                  <div className="flex flex-col">
+                    <span className="font-medium">Hasil kesehatan baru</span>
+                    <span className="text-xs text-gray-500">2 jam yang lalu</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <div className="flex flex-col">
+                    <span className="font-medium">Keluhan baru menunggu</span>
+                    <span className="text-xs text-gray-500">1 hari yang lalu</span>
+                  </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  <div className="flex flex-col">
+                    <span className="font-medium">Dokumen kesehatan baru</span>
+                    <span className="text-xs text-gray-500">3 hari yang lalu</span>
+                  </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          <div className="mt-3 flex">
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "flex-1 text-xs h-8 border-dashed",
+                role !== 'siswa' ? 'border-kesehatan-biru text-kesehatan-biru' : 'bg-kesehatan-biru text-white hover:bg-kesehatan-biru/90'
+              )}
+              disabled={role === 'siswa'}
+              onClick={() => handleRoleSwitch('siswa')}
+            >
+              Siswa
+            </Button>
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "flex-1 text-xs h-8 border-dashed",
+                role !== 'guru' ? 'border-kesehatan-hijau text-kesehatan-hijau' : 'bg-kesehatan-hijau text-white hover:bg-kesehatan-hijau/90'
+              )}
+              disabled={role === 'guru'}
+              onClick={() => handleRoleSwitch('guru')}
+            >
+              Guru
+            </Button>
+            <Button 
+              variant="outline"
+              size="sm"
+              className={cn(
+                "flex-1 text-xs h-8 border-dashed",
+                role !== 'admin' ? 'border-kesehatan-kuning text-kesehatan-kuning' : 'bg-kesehatan-kuning text-white hover:bg-kesehatan-kuning/90'
+              )}
+              disabled={role === 'admin'}
+              onClick={() => handleRoleSwitch('admin')}
+            >
+              Admin
+            </Button>
           </div>
         </div>
 
