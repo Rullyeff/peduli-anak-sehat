@@ -1,10 +1,9 @@
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Layout from '@/components/Layout';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, BookOpen, Info, Child } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -92,6 +91,80 @@ const Index = () => {
                 </p>
               </CardContent>
             </Card>
+          </div>
+        </div>
+      </section>
+
+      {/* Edukasi Reproduksi Section */}
+      <section className="py-16 bg-blue-50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4">Edukasi Reproduksi untuk Anak SD</h2>
+            <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              Materi edukasi yang disampaikan dengan cara yang sesuai usia untuk membantu anak-anak memahami tubuh mereka dengan cara yang sehat
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <Card className="border-2 border-teal-100 hover:border-teal-300 transition-colors duration-300">
+              <CardContent className="pt-6">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-teal-100 flex items-center justify-center">
+                  <Child className="h-8 w-8 text-teal-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">Mengenal Tubuh Kita</h3>
+                <p className="text-gray-600 text-center mb-4">
+                  Pembelajaran tentang bagian tubuh dengan nama yang tepat dan fungsinya masing-masing, membangun dasar pemahaman yang sehat.
+                </p>
+                <div className="text-center">
+                  <Button variant="outline" size="sm" className="text-teal-600 border-teal-300 hover:bg-teal-50">
+                    Pelajari Lebih Lanjut
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-purple-100 hover:border-purple-300 transition-colors duration-300">
+              <CardContent className="pt-6">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-purple-100 flex items-center justify-center">
+                  <Info className="h-8 w-8 text-purple-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">Batasan Pribadi</h3>
+                <p className="text-gray-600 text-center mb-4">
+                  Memahami konsep persetujuan, privasi tubuh, dan bagaimana menyampaikan ketidaknyamanan secara tepat kepada orang dewasa.
+                </p>
+                <div className="text-center">
+                  <Button variant="outline" size="sm" className="text-purple-600 border-purple-300 hover:bg-purple-50">
+                    Pelajari Lebih Lanjut
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 border-amber-100 hover:border-amber-300 transition-colors duration-300">
+              <CardContent className="pt-6">
+                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-amber-100 flex items-center justify-center">
+                  <BookOpen className="h-8 w-8 text-amber-600" />
+                </div>
+                <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">Pertumbuhan & Perkembangan</h3>
+                <p className="text-gray-600 text-center mb-4">
+                  Pengetahuan tentang tahapan tumbuh kembang dan perubahan tubuh yang akan terjadi saat beranjak remaja.
+                </p>
+                <div className="text-center">
+                  <Button variant="outline" size="sm" className="text-amber-600 border-amber-300 hover:bg-amber-50">
+                    Pelajari Lebih Lanjut
+                  </Button>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-12 text-center">
+            <Button asChild className="bg-teal-600 hover:bg-teal-700">
+              <Link to="/artikel-edukasi" className="flex items-center gap-2">
+                Akses Semua Materi Edukasi
+                <ArrowRight size={16} />
+              </Link>
+            </Button>
           </div>
         </div>
       </section>
