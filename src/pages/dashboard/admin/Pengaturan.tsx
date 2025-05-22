@@ -11,6 +11,7 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { Json } from '@/integrations/supabase/types';
 
 interface SystemSettings {
   school_name: string;
@@ -19,6 +20,31 @@ interface SystemSettings {
   maintenance_mode: boolean;
   data_retention_days: number;
 }
+
+// Helper function to convert Json to SystemSettings with type safety
+const jsonToSystemSettings = (json: Json): SystemSettings => {
+  const defaultSettings: SystemSettings = {
+    school_name: 'SD PEDULIKECIL',
+    school_address: 'Jl. Pendidikan No. 123, Jakarta',
+    enable_notifications: true,
+    maintenance_mode: false,
+    data_retention_days: 365,
+  };
+
+  if (!json || typeof json !== 'object' || Array.isArray(json)) {
+    return defaultSettings;
+  }
+
+  const jsonObj = json as Record<string, unknown>;
+  
+  return {
+    school_name: typeof jsonObj.school_name === 'string' ? jsonObj.school_name : defaultSettings.school_name,
+    school_address: typeof jsonObj.school_address === 'string' ? jsonObj.school_address : defaultSettings.school_address,
+    enable_notifications: typeof jsonObj.enable_notifications === 'boolean' ? jsonObj.enable_notifications : defaultSettings.enable_notifications,
+    maintenance_mode: typeof jsonObj.maintenance_mode === 'boolean' ? jsonObj.maintenance_mode : defaultSettings.maintenance_mode,
+    data_retention_days: typeof jsonObj.data_retention_days === 'number' ? jsonObj.data_retention_days : defaultSettings.data_retention_days,
+  };
+};
 
 const Pengaturan = () => {
   const [activeTab, setActiveTab] = useState('system');
@@ -52,7 +78,8 @@ const Pengaturan = () => {
       }
       
       if (data && data.value) {
-        setSettings(data.value as SystemSettings);
+        // Use the helper function to safely convert Json to SystemSettings
+        setSettings(jsonToSystemSettings(data.value));
       }
     } catch (error) {
       console.error('Error fetching settings:', error);
@@ -76,7 +103,7 @@ const Pengaturan = () => {
         // Update existing settings
         const { error } = await supabase
           .from('settings')
-          .update({ value: settings })
+          .update({ value: settings as unknown as Json })
           .eq('key', 'system_settings');
           
         if (error) throw error;
@@ -84,7 +111,10 @@ const Pengaturan = () => {
         // Insert new settings
         const { error } = await supabase
           .from('settings')
-          .insert({ key: 'system_settings', value: settings });
+          .insert({ 
+            key: 'system_settings', 
+            value: settings as unknown as Json 
+          });
           
         if (error) throw error;
       }

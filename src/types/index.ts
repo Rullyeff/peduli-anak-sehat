@@ -38,3 +38,11 @@ export interface HealthRecord {
   created_at: string;
   tanggal: string;
 }
+
+export interface SystemSettings {
+  school_name: string;
+  school_address: string;
+  enable_notifications: boolean;
+  maintenance_mode: boolean;
+  data_retention_days: number;
+}
