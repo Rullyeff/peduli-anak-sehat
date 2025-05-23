@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { adminLinks } from '@/constants/menuLinks';
@@ -106,7 +105,7 @@ const KelolaGuru = () => {
     setFormData({
       nama: guru.nama,
       bidang_studi: guru.bidang_studi || '',
-      wali_kelas: guru.wali_kelas || '',
+      wali_kelas: guru.wali_kelas || 'none', // Convert null to "none" for the select
       nomor_kontak: guru.nomor_kontak || '',
     });
     setCurrentGuru(guru);
@@ -117,6 +116,9 @@ const KelolaGuru = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      // Convert "none" back to null for database storage
+      const waliKelasValue = formData.wali_kelas === 'none' ? null : formData.wali_kelas;
+      
       if (editMode && currentGuru) {
         // Update existing guru
         const { error } = await supabase
@@ -124,7 +126,7 @@ const KelolaGuru = () => {
           .update({
             nama: formData.nama,
             bidang_studi: formData.bidang_studi || null,
-            wali_kelas: formData.wali_kelas || null,
+            wali_kelas: waliKelasValue,
             nomor_kontak: formData.nomor_kontak || null,
           })
           .eq('id', currentGuru.id);
@@ -139,7 +141,7 @@ const KelolaGuru = () => {
           .insert({
             nama: formData.nama,
             bidang_studi: formData.bidang_studi || null,
-            wali_kelas: formData.wali_kelas || null,
+            wali_kelas: waliKelasValue,
             nomor_kontak: formData.nomor_kontak || null,
             user_id: crypto.randomUUID(), // This is temporary; in a real app, you'd link to auth user
           });
