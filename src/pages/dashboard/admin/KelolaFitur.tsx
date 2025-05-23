@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { adminLinks } from '@/constants/menuLinks';
@@ -11,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { toast } from 'sonner';
 
 const KelolaFitur = () => {
+  console.log('KelolaFitur component rendered');
+  
   const [features, setFeatures] = useState([
     {
       id: 1,
@@ -145,7 +146,10 @@ const KelolaFitur = () => {
                     <Label htmlFor="colorTheme">Tema Warna</Label>
                     <Select 
                       value={formData.colorTheme} 
-                      onValueChange={(value) => setFormData(prev => ({ ...prev, colorTheme: value }))}
+                      onValueChange={(value) => {
+                        console.log('KelolaFitur: Select value changed to:', value);
+                        setFormData(prev => ({ ...prev, colorTheme: value }))
+                      }}
                     >
                       <SelectTrigger>
                         <SelectValue />
