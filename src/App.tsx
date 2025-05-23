@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -23,12 +22,14 @@ import DaftarSiswa from "./pages/dashboard/guru/DaftarSiswa";
 import GuruKeluhan from "./pages/dashboard/guru/Keluhan";
 import Laporan from "./pages/dashboard/guru/Laporan";
 import Pemberitahuan from "./pages/dashboard/guru/Pemberitahuan";
+import KelolaVideo from "./pages/dashboard/guru/KelolaVideo";
 
 // Admin pages
 import KelolaSiswa from "./pages/dashboard/admin/KelolaSiswa";
 import KelolaGuru from "./pages/dashboard/admin/KelolaGuru";
 import LaporanLengkap from "./pages/dashboard/admin/LaporanLengkap";
 import Pengaturan from "./pages/dashboard/admin/Pengaturan";
+import KelolaFitur from "./pages/dashboard/admin/KelolaFitur";
 
 const queryClient = new QueryClient();
 
@@ -56,6 +57,7 @@ const App = () => (
           <Route path="/dashboard/guru/keluhan" element={<GuruKeluhan />} />
           <Route path="/dashboard/guru/laporan" element={<Laporan />} />
           <Route path="/dashboard/guru/pemberitahuan" element={<Pemberitahuan />} />
+          <Route path="/dashboard/guru/video" element={<KelolaVideo />} />
           
           {/* Rute Dashboard Admin */}
           <Route path="/dashboard/admin" element={<DashboardAdmin />} />
@@ -63,6 +65,7 @@ const App = () => (
           <Route path="/dashboard/admin/guru" element={<KelolaGuru />} />
           <Route path="/dashboard/admin/laporan" element={<LaporanLengkap />} />
           <Route path="/dashboard/admin/pengaturan" element={<Pengaturan />} />
+          <Route path="/dashboard/admin/fitur" element={<KelolaFitur />} />
           
           {/* Rute Catch-All untuk 404 */}
           <Route path="*" element={<NotFound />} />

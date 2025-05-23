@@ -15,6 +15,7 @@ import { Label } from '@/components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { toast } from 'sonner';
 import { siswaLinks } from '@/constants/menuLinks';
+import VideoSection from '@/components/dashboard/VideoSection';
 
 const DashboardSiswa = () => {
   const [suhu, setSuhu] = useState('');
@@ -47,6 +48,26 @@ const DashboardSiswa = () => {
     setKondisi('sehat');
     setKeluhan('');
   };
+
+  // Data video dummy yang biasanya akan diambil dari backend
+  const videos = [
+    {
+      id: 1,
+      title: 'Cara Mencuci Tangan yang Benar',
+      description: 'Video edukasi tentang langkah-langkah mencuci tangan yang benar untuk mencegah penyakit',
+      youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      kelas: '6A',
+      active: true
+    },
+    {
+      id: 2,
+      title: 'Pentingnya Menjaga Kebersihan Gigi',
+      description: 'Tips dan cara menjaga kesehatan gigi dan mulut untuk anak-anak',
+      youtubeUrl: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
+      kelas: '6A',
+      active: true
+    }
+  ];
 
   return (
     <div className="min-h-screen flex bg-gray-50">
@@ -216,6 +237,11 @@ const DashboardSiswa = () => {
               </CardContent>
             </Card>
           </div>
+        </div>
+
+        {/* Video Section */}
+        <div className="mt-6">
+          <VideoSection videos={videos} />
         </div>
       </div>
     </div>
