@@ -355,7 +355,7 @@ const KelolaGuru = () => {
                     <SelectValue placeholder="Pilih Kelas" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="">Bukan Wali Kelas</SelectItem>
+                    <SelectItem value="none">Bukan Wali Kelas</SelectItem>
                     <SelectItem value="6A">Kelas 6A</SelectItem>
                     <SelectItem value="6B">Kelas 6B</SelectItem>
                     <SelectItem value="5A">Kelas 5A</SelectItem>
