@@ -3,6 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface EducationCardProps {
   borderColorClass: string;
@@ -15,6 +16,7 @@ interface EducationCardProps {
   buttonColorClass: string;
   buttonBorderClass: string;
   buttonHoverClass: string;
+  linkPath?: string;
 }
 
 const EducationCard: React.FC<EducationCardProps> = ({
@@ -27,25 +29,29 @@ const EducationCard: React.FC<EducationCardProps> = ({
   description,
   buttonColorClass,
   buttonBorderClass,
-  buttonHoverClass
+  buttonHoverClass,
+  linkPath = "/artikel-edukasi"
 }) => {
   return (
-    <Card className={`border-2 ${borderColorClass} ${hoverColorClass} transition-all duration-300 hover:shadow-lg hover:-translate-y-2 group`}>
-      <CardContent className="pt-6">
-        <div className={`w-16 h-16 mx-auto mb-6 rounded-full ${bgColorClass} flex items-center justify-center transition-transform duration-300 group-hover:scale-110`}>
-          <Icon className={`h-8 w-8 ${iconColorClass} transition-all duration-300 group-hover:rotate-12`} />
+    <Card className={`border bg-white rounded-xl shadow-sm hover:shadow-md transition-all duration-300 h-full`}>
+      <CardContent className="pt-8 px-8 pb-6 flex flex-col h-full">
+        <div className={`w-16 h-16 mx-auto mb-6 rounded-full ${bgColorClass} flex items-center justify-center`}>
+          <Icon className={`h-8 w-8 ${iconColorClass}`} />
         </div>
-        <h3 className="text-xl font-semibold text-center mb-4 text-gray-800 transition-colors duration-300 group-hover:text-primary">{title}</h3>
-        <p className="text-gray-600 text-center mb-4">
+        <h3 className="text-xl font-semibold text-center mb-4 text-gray-800">{title}</h3>
+        <p className="text-gray-600 text-center mb-6 flex-grow">
           {description}
         </p>
-        <div className="text-center">
+        <div className="text-center mt-auto">
           <Button 
             variant="outline" 
             size="sm" 
-            className={`${buttonColorClass} ${buttonBorderClass} ${buttonHoverClass} transition-all duration-300 group-hover:scale-105`}
+            className={`rounded-full px-6 py-1 border ${buttonBorderClass} ${buttonColorClass} hover:bg-opacity-10 ${buttonHoverClass}`}
+            asChild
           >
-            Pelajari Lebih Lanjut
+            <Link to={linkPath}>
+              Pelajari Lebih Lanjut
+            </Link>
           </Button>
         </div>
       </CardContent>

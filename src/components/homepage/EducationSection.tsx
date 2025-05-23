@@ -58,7 +58,7 @@ const EducationSection = () => {
         </div>
 
         <div className="mt-12 text-center">
-          <Button asChild className="bg-teal-600 hover:bg-teal-700">
+          <Button asChild className="bg-teal-600 hover:bg-teal-700 rounded-full px-8">
             <Link to="/artikel-edukasi" className="flex items-center gap-2">
               Akses Semua Materi Edukasi
               <ArrowRight size={16} />
