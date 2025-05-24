@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -27,6 +28,7 @@ import KelolaVideo from "./pages/dashboard/guru/KelolaVideo";
 // Admin pages
 import KelolaSiswa from "./pages/dashboard/admin/KelolaSiswa";
 import KelolaGuru from "./pages/dashboard/admin/KelolaGuru";
+import AdminKelolaVideo from "./pages/dashboard/admin/KelolaVideo";
 import LaporanLengkap from "./pages/dashboard/admin/LaporanLengkap";
 import Pengaturan from "./pages/dashboard/admin/Pengaturan";
 import KelolaFitur from "./pages/dashboard/admin/KelolaFitur";
@@ -63,6 +65,7 @@ const App = () => (
           <Route path="/dashboard/admin" element={<DashboardAdmin />} />
           <Route path="/dashboard/admin/siswa" element={<KelolaSiswa />} />
           <Route path="/dashboard/admin/guru" element={<KelolaGuru />} />
+          <Route path="/dashboard/admin/video" element={<AdminKelolaVideo />} />
           <Route path="/dashboard/admin/laporan" element={<LaporanLengkap />} />
           <Route path="/dashboard/admin/pengaturan" element={<Pengaturan />} />
           <Route path="/dashboard/admin/fitur" element={<KelolaFitur />} />
