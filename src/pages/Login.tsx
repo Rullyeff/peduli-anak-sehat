@@ -51,24 +51,24 @@ const Login = () => {
               Pilih peran dan masuk untuk mengakses platform
             </CardDescription>
           </CardHeader>
-          <Tabs defaultValue="siswa" value={role} onValueChange={setRole}>
-            <TabsList className="grid grid-cols-3 w-full mb-6">
-              <TabsTrigger value="siswa" className="flex flex-col items-center gap-1 py-2">
-                <User size={16} />
-                <span>Siswa</span>
-              </TabsTrigger>
-              <TabsTrigger value="guru" className="flex flex-col items-center gap-1 py-2">
-                <Users size={16} />
-                <span>Guru</span>
-              </TabsTrigger>
-              <TabsTrigger value="admin" className="flex flex-col items-center gap-1 py-2">
-                <Settings size={16} />
-                <span>Admin</span>
-              </TabsTrigger>
-            </TabsList>
+          <CardContent>
+            <Tabs defaultValue="siswa" value={role} onValueChange={setRole}>
+              <TabsList className="grid grid-cols-3 w-full mb-6">
+                <TabsTrigger value="siswa" className="flex flex-col items-center gap-1 py-2">
+                  <User size={16} />
+                  <span>Siswa</span>
+                </TabsTrigger>
+                <TabsTrigger value="guru" className="flex flex-col items-center gap-1 py-2">
+                  <Users size={16} />
+                  <span>Guru</span>
+                </TabsTrigger>
+                <TabsTrigger value="admin" className="flex flex-col items-center gap-1 py-2">
+                  <Settings size={16} />
+                  <span>Admin</span>
+                </TabsTrigger>
+              </TabsList>
 
-            <TabsContent value="siswa">
-              <CardContent>
+              <TabsContent value="siswa">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="username">Nama Pengguna</Label>
@@ -93,14 +93,12 @@ const Login = () => {
                     <LogIn size={16} className="mr-2" /> Masuk sebagai Siswa
                   </Button>
                 </form>
-              </CardContent>
-              <CardFooter className="text-sm text-center text-gray-500">
-                <p className="w-full">Demo login siswa: siswa / password</p>
-              </CardFooter>
-            </TabsContent>
+                <div className="text-sm text-center text-gray-500 mt-4">
+                  <p className="w-full">Demo login siswa: siswa / password</p>
+                </div>
+              </TabsContent>
 
-            <TabsContent value="guru">
-              <CardContent>
+              <TabsContent value="guru">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="username">Nama Pengguna</Label>
@@ -125,14 +123,12 @@ const Login = () => {
                     <LogIn size={16} className="mr-2" /> Masuk sebagai Guru
                   </Button>
                 </form>
-              </CardContent>
-              <CardFooter className="text-sm text-center text-gray-500">
-                <p className="w-full">Demo login guru: guru / password</p>
-              </CardFooter>
-            </TabsContent>
+                <div className="text-sm text-center text-gray-500 mt-4">
+                  <p className="w-full">Demo login guru: guru / password</p>
+                </div>
+              </TabsContent>
 
-            <TabsContent value="admin">
-              <CardContent>
+              <TabsContent value="admin">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
                     <Label htmlFor="username">Nama Pengguna</Label>
@@ -157,12 +153,12 @@ const Login = () => {
                     <LogIn size={16} className="mr-2" /> Masuk sebagai Admin
                   </Button>
                 </form>
-              </CardContent>
-              <CardFooter className="text-sm text-center text-gray-500">
-                <p className="w-full">Demo login admin: admin / password</p>
-              </CardFooter>
-            </TabsContent>
-          </Tabs>
+                <div className="text-sm text-center text-gray-500 mt-4">
+                  <p className="w-full">Demo login admin: admin / password</p>
+                </div>
+              </TabsContent>
+            </Tabs>
+          </CardContent>
         </Card>
       </div>
     </Layout>
