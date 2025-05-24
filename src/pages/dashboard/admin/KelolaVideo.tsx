@@ -1,10 +1,11 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Plus, Search } from 'lucide-react';
 import { toast } from 'sonner';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import SidebarDashboard from '@/components/dashboard/SidebarDashboard';
 import { adminLinks } from '@/constants/menuLinks';
 import { VideoTable } from '@/components/admin/video/VideoTable';
@@ -19,11 +20,11 @@ import {
 
 const KelolaVideo = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [videos, setVideos] = useState<Video[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
   const [showDialog, setShowDialog] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [currentVideo, setCurrentVideo] = useState<Video | null>(null);
+  
+  const queryClient = useQueryClient();
   
   // Form state
   const [formData, setFormData] = useState({
@@ -35,39 +36,71 @@ const KelolaVideo = () => {
     durasi: '',
   });
 
-  useEffect(() => {
-    loadVideos();
-  }, []);
+  // Fetch videos using React Query
+  const { data: videos = [], isLoading } = useQuery({
+    queryKey: ['videos'],
+    queryFn: fetchAllVideos,
+  });
 
-  const loadVideos = async () => {
-    try {
-      setIsLoading(true);
-      const data = await fetchAllVideos();
-      setVideos(data);
-    } catch (error) {
-      console.error('Error fetching videos:', error);
-      toast.error('Gagal memuat daftar video');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  // Create video mutation
+  const createMutation = useMutation({
+    mutationFn: ({ judul, deskripsi, url, kategori, thumbnail, durasi }: {
+      judul: string;
+      deskripsi: string;
+      url: string;
+      kategori: string;
+      thumbnail?: string;
+      durasi?: string;
+    }) => createVideo(judul, deskripsi, url, kategori, thumbnail, durasi),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['videos'] });
+      toast.success('Video baru berhasil ditambahkan');
+      setShowDialog(false);
+      resetForm();
+    },
+    onError: (error) => {
+      console.error('Error creating video:', error);
+      toast.error('Gagal menambahkan video');
+    },
+  });
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // Update video mutation
+  const updateMutation = useMutation({
+    mutationFn: ({ id, judul, deskripsi, url, kategori, thumbnail, durasi }: {
+      id: string;
+      judul: string;
+      deskripsi: string;
+      url: string;
+      kategori: string;
+      thumbnail?: string;
+      durasi?: string;
+    }) => updateVideo(id, judul, deskripsi, url, kategori, thumbnail, durasi),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['videos'] });
+      toast.success('Video berhasil diperbarui');
+      setShowDialog(false);
+      resetForm();
+    },
+    onError: (error) => {
+      console.error('Error updating video:', error);
+      toast.error('Gagal memperbarui video');
+    },
+  });
 
-  const handleSelectChange = (name: string, value: string) => {
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
-  };
+  // Delete video mutation
+  const deleteMutation = useMutation({
+    mutationFn: deleteVideo,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['videos'] });
+      toast.success('Video berhasil dihapus');
+    },
+    onError: (error) => {
+      console.error('Error deleting video:', error);
+      toast.error('Gagal menghapus video');
+    },
+  });
 
-  const openAddDialog = () => {
+  const resetForm = () => {
     setFormData({
       judul: '',
       deskripsi: '',
@@ -76,7 +109,27 @@ const KelolaVideo = () => {
       thumbnail: '',
       durasi: '',
     });
+    setCurrentVideo(null);
     setEditMode(false);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleSelectChange = (name: string, value: string) => {
+    setFormData(prev => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const openAddDialog = () => {
+    resetForm();
     setShowDialog(true);
   };
 
@@ -96,50 +149,32 @@ const KelolaVideo = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    try {
-      if (editMode && currentVideo) {
-        // Update existing video
-        await updateVideo(
-          currentVideo.id,
-          formData.judul,
-          formData.deskripsi,
-          formData.url,
-          formData.kategori,
-          formData.thumbnail || undefined,
-          formData.durasi || undefined
-        );
-        toast.success('Video berhasil diperbarui');
-      } else {
-        // Add new video
-        await createVideo(
-          formData.judul,
-          formData.deskripsi,
-          formData.url,
-          formData.kategori,
-          formData.thumbnail || undefined,
-          formData.durasi || undefined
-        );
-        toast.success('Video baru berhasil ditambahkan');
-      }
-      
-      setShowDialog(false);
-      loadVideos();
-    } catch (error) {
-      console.error('Error saving video:', error);
-      toast.error('Gagal menyimpan video');
+    
+    if (editMode && currentVideo) {
+      updateMutation.mutate({
+        id: currentVideo.id,
+        judul: formData.judul,
+        deskripsi: formData.deskripsi,
+        url: formData.url,
+        kategori: formData.kategori,
+        thumbnail: formData.thumbnail || undefined,
+        durasi: formData.durasi || undefined,
+      });
+    } else {
+      createMutation.mutate({
+        judul: formData.judul,
+        deskripsi: formData.deskripsi,
+        url: formData.url,
+        kategori: formData.kategori,
+        thumbnail: formData.thumbnail || undefined,
+        durasi: formData.durasi || undefined,
+      });
     }
   };
 
-  const handleDeleteVideo = async (id: string) => {
+  const handleDeleteVideo = (id: string) => {
     if (confirm('Anda yakin ingin menghapus video ini?')) {
-      try {
-        await deleteVideo(id);
-        toast.success('Video berhasil dihapus');
-        loadVideos();
-      } catch (error) {
-        console.error('Error deleting video:', error);
-        toast.error('Gagal menghapus video');
-      }
+      deleteMutation.mutate(id);
     }
   };
 

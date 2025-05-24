@@ -405,6 +405,42 @@ export type Database = {
         }
         Relationships: []
       }
+      videos: {
+        Row: {
+          created_at: string
+          deskripsi: string | null
+          durasi: string | null
+          id: string
+          judul: string
+          kategori: string
+          thumbnail: string | null
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          deskripsi?: string | null
+          durasi?: string | null
+          id?: string
+          judul: string
+          kategori: string
+          thumbnail?: string | null
+          updated_at?: string
+          url: string
+        }
+        Update: {
+          created_at?: string
+          deskripsi?: string | null
+          durasi?: string | null
+          id?: string
+          judul?: string
+          kategori?: string
+          thumbnail?: string | null
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
