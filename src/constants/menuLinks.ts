@@ -8,7 +8,8 @@ import {
   Users,
   FileText,
   Bell,
-  Settings
+  Settings,
+  Play
 } from 'lucide-react';
 import { NavLink } from '@/types';
 
@@ -65,6 +66,11 @@ export const guruLinks: NavLink[] = [
     title: 'Pemberitahuan',
     href: '/dashboard/guru/pemberitahuan',
     icon: Bell
+  },
+  {
+    title: 'Kelola Video',
+    href: '/dashboard/guru/video',
+    icon: Play
   }
 ];
 
@@ -83,6 +89,11 @@ export const adminLinks: NavLink[] = [
     title: 'Kelola Guru',
     href: '/dashboard/admin/guru',
     icon: Users
+  },
+  {
+    title: 'Kelola Video',
+    href: '/dashboard/admin/video',
+    icon: Play
   },
   {
     title: 'Laporan Lengkap',
